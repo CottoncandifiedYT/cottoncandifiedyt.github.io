@@ -1,272 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cotton Translator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Runic&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotton Rune Translator</title>
+    <style>
+        body {
+            background: #fff7c2;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+        }
 
-  <style>
-    :root {
-      --bg: #f5e6c8;
-      --fg: #2b1b10;
-      --accent: #b07a2a;
-      --panel: #fdf4dd;
-      --border: #d1b58a;
-    }
-    .dark {
-      --bg: #02061a;
-      --fg: #f7e3b5;
-      --accent: #ffb84a;
-      --panel: #071024;
-      --border: #28324a;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.5rem;
-    }
-    .app { width: 100%; max-width: 960px; }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    h1 { margin: 0; font-size: 1.8rem; }
-    .subtitle { font-size: 0.9rem; opacity: 0.8; }
-    button, .toggle {
-      cursor: pointer;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--fg);
-      padding: 0.4rem 0.9rem;
-      font-size: 0.85rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-    button:hover, .toggle:hover {
-      background: var(--accent);
-      color: #120b05;
-    }
-    .panels {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    @media (max-width: 768px) {
-      .panels { grid-template-columns: 1fr; }
-    }
-    .panel {
-      background: var(--panel);
-      border-radius: 0.75rem;
-      border: 1px solid var(--border);
-      padding: 0.9rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    textarea {
-      width: 100%;
-      min-height: 140px;
-      resize: vertical;
-      border-radius: 0.6rem;
-      border: 1px solid var(--border);
-      padding: 0.6rem;
-      font-size: 0.95rem;
-      background<body>
-  <div class="app">
-    <header>
-      <div>
-        <h1>Cotton Translator</h1>
-        <div class="subtitle">Translate English into an ancient Cotton tongue — and back again.</div>
-      </div>
-      <div class="toggle" id="themeToggle">🌞 Light</div>
-    </header>
+        h1 {
+            font-size: 42px;
+            color: #ff7b00;
+            margin-bottom: 10px;
+        }
 
-    <div class="controls">
-      <button id="swapBtn">⇄ Swap (English ↔ Cotton)</button>
-      <button id="copyBtn">📋 Copy Output</button>
-    </div>
+        textarea {
+            width: 90%;
+            max-width: 600px;
+            height: 140px;
+            padding: 12px;
+            font-size: 18px;
+            border: 3px solid #ffb300;
+            border-radius: 10px;
+            outline: none;
+            resize: none;
+            background: #fffdf2;
+        }
 
-    <div class="panels">
-      <div class="panel">
-        <h2 id="inputTitle">English</h2>
-        <textarea id="inputBox" placeholder="Type English here…"></textarea>
-      </div>
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 20px;
+            background: #ffb300;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
 
-      <div class="panel">
-        <h2 id="outputTitle">Cotton Script</h2>
-        <textarea id="outputBox" class="runic" readonly placeholder="Translation will appear here…"></textarea>
-      </div>
-    </div>
+        button:hover {
+            background: #ff9900;
+        }
 
-    <div class="codex">
-      <h3>Alphabet Codex</h3>
-      <div class="alphabet-grid" id="alphabetGrid"></div>
-    </div>
+        #output {
+            margin-top: 30px;
+            font-size: 28px;
+            color: #333;
+            padding: 20px;
+            background: #fffdf2;
+            border: 3px solid #ffb300;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: 50px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
 
-    <div class="codex">
-      <h3>Punctuation Codex</h3>
+    <h1>Cotton Rune Translator</h1>
+    <p>English → Cotton Runes + Cotton Punctuation</p>
 
-      <strong>Standard Marks</strong>
-      <div class="punct-list" id="standardPunct"></div>
+    <textarea id="inputText" placeholder="Type here..."></textarea>
+    <br>
+    <button onclick="translate()">Translate</button>
 
-      <strong style="margin-top:1rem; display:block;">Cotton-Only Marks</strong>
-      <div class="punct-list" id="cottonOnlyPunct"></div>
-    </div>
+    <div id="output"></div>
 
-    <footer>
-      Cotton Translator · Noto Sans Runic · Dark/Light · English ↔ Cotton
-    </footer>
-  </div>
-  <script>
-    const alphaMap = {
-      a:"ᚨ", b:"ᛒ", c:"𐌂", d:"ᛞ", e:"ᛖ", f:"ᚠ", g:"ᚷ", h:"ᚺ",
-      i:"ᛁ", j:"ᛃ", k:"ᚲ", l:"ᛚ", m:"ᛗ", n:"ᚾ", o:"ᛟ", p:"ᛈ",
-      q:"𐌒", r:"ᚱ", s:"ᛋ", t:"ᛏ", u:"ᚢ", v:"ᚡ", w:"ᚹ", x:"𐌗",
-      y:"ᛦ", z:"ᛉ"
-    };
+    <script>
+        const runes = {
+            "a": "ᚨ", "b": "ᛒ", "c": "𐌂", "d": "ᛞ",
+            "e": "ᛖ", "f": "ᚠ", "g": "ᚷ", "h": "ᚺ",
+            "i": "ᛁ", "j": "ᛃ", "k": "ᚲ", "l": "ᛚ",
+            "m": "ᛗ", "n": "ᚾ", "o": "ᛟ", "p": "ᛈ",
+            "q": "𐌒", "r": "ᚱ", "s": "ᛋ", "t": "ᛏ",
+            "u": "ᚢ", "v": "ᚡ", "w": "ᚹ", "x": "𐌗",
+            "y": "ᛦ", "z": "ᛉ"
+        };
 
-    const punctMap = {
-      ".":"·", ",":"‚", "?":"⸮", "!":"‼",
-      ";":"⸸", ":":"⸻", "(": "⟨", ")":"⟩"
-    };
+        const punct = {
+            ".": "·",
+            ",": "‚",
+            "?": "⸮",
+            "!": "‼",
+            ";": "⸸",
+            ":": "⸻",
+            "\"": "⟦⟧",
+            "(": "⟨",
+            ")": "⟩"
+        };
 
-    const cottonOnlyMarks = [
-      { symbol:"ᛝ", name:"Emotion Mark", desc:"like !?" },
-      { symbol:"𐌖", name:"Amplifier", desc:"like !!!" },
-      { symbol:"⟡", name:"Final Seal", desc:"like a fancy period" }
-    ];
+        function translate() {
+            let text = document.getElementById("inputText").value;
 
-    const alphaReverse = {};
-    for (const [k,v] of Object.entries(alphaMap)) alphaReverse[v] = k;
+            // Special combos first
+            text = text.replace(/!!!/g, "𐌖");
+            text = text.replace(/!\?/g, "ᛝ");
 
-    const punctReverse = {};
-    for (const [k,v] of Object.entries(punctMap)) punctReverse[v] = k;
+            let output = "";
 
-    function englishToCottonQuotes(str) {
-      let out = "", open = true;
-      for (const ch of str) {
-        if (ch === '"') { out += open ? "⟦" : "⟧"; open = !open; }
-        else out += ch;
-      }
-      return out;
-    }
+            for (let char of text.toLowerCase()) {
+                if (runes[char]) {
+                    output += runes[char];
+                } else if (punct[char]) {
+                    output += punct[char];
+                } else {
+                    output += char;
+                }
+            }
 
-    function cottonToEnglishQuotes(str) {
-      return str.replace(/⟦/g,'"').replace(/⟧/g,'"');
-    }
+            // Replace final period with ⟡
+            output = output.replace(/·$/g, "⟡");
 
-    function englishToCotton(text) {
-      text = englishToCottonQuotes(text);
-      let out = "";
-      for (const ch of text) {
-        const lower = ch.toLowerCase();
-        if (alphaMap[lower]) out += alphaMap[lower];
-        else if (punctMap[ch]) out += punctMap[ch];
-        else out += ch;
-      }
-      return out;
-    }
+            document.getElementById("output").innerText = output;
+        }
+    </script>
 
-    function cottonToEnglish(text) {
-      text = cottonToEnglishQuotes(text);
-      let out = "";
-      for (const ch of text) {
-        if (alphaReverse[ch]) out += alphaReverse[ch];
-        else if (punctReverse[ch]) out += punctReverse[ch];
-        else out += ch;
-      }
-      return out;
-    }
-
-    const inputBox = document.getElementById("inputBox");
-    const outputBox = document.getElementById("outputBox");
-    const swapBtn = document.getElementById("swapBtn");
-    const copyBtn = document.getElementById("copyBtn");
-    const themeToggle = document.getElementById("themeToggle");
-    const inputTitle = document.getElementById("inputTitle");
-    const outputTitle = document.getElementById("outputTitle");
-
-    let englishMode = true;
-
-    function update() {
-      const text = inputBox.value;
-      outputBox.value = englishMode ? englishToCotton(text) : cottonToEnglish(text);
-    }
-
-    inputBox.addEventListener("input", update);
-
-    swapBtn.addEventListener("click", () => {
-      englishMode = !englishMode;
-
-      const temp = inputBox.value;
-      inputBox.value = outputBox.value;
-      outputBox.value = temp;
-
-      if (englishMode) {
-        inputTitle.textContent = "English";
-        outputTitle.textContent = "Cotton Script";
-        outputBox.classList.add("runic");
-      } else {
-        inputTitle.textContent = "Cotton Script";
-        outputTitle.textContent = "English";
-        outputBox.classList.remove("runic");
-      }
-
-      update();
-    });
-
-    copyBtn.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(outputBox.value);
-      copyBtn.textContent = "✅ Copied!";
-      setTimeout(() => copyBtn.textContent = "📋 Copy Output", 900);
-    });
-
-    themeToggle.addEventListener("click", () => {
-      const dark = document.body.classList.toggle("dark");
-      themeToggle.textContent = dark ? "🌙 Dark" : "🌞 Light";
-    });
-
-    const alphabetGrid = document.getElementById("alphabetGrid");
-    for (const [latin, rune] of Object.entries(alphaMap)) {
-      const div = document.createElement("div");
-      div.className = "alphabet-item";
-      div.innerHTML = `<span>${rune}</span><span>${latin.toUpperCase()}</span>`;
-      alphabetGrid.appendChild(div);
-    }
-
-    const standardPunct = document.getElementById("standardPunct");
-    for (const [eng, cot] of Object.entries(punctMap)) {
-      const div = document.createElement("div");
-      div.className = "punct-item";
-      div.innerHTML = `
-        <div class="punct-symbols"><span>${eng}</span><span>→</span><span>${cot}</span></div>
-      `;
-      standardPunct.appendChild(div);
-    }
-
-    const cottonOnlyPunct = document.getElementById("cottonOnlyPunct");
-    cottonOnlyMarks.forEach(m => {
-      const div = document.createElement("div");
-      div.className = "punct-item";
-      div.innerHTML = `
-        <div class="punct-symbols"><span>${m.symbol}</span><span>${m.name}</span></div>
-        <div class="punct-desc">${m.desc}</div>
-      `;
-      cottonOnlyPunct.appendChild(div);
-    });
-  </script>
 </body>
 </html>
