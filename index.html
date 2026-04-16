@@ -93,7 +93,6 @@
             "!": "‼",
             ";": "⸸",
             ":": "⸻",
-            "\"": "⟦⟧",
             "(": "⟨",
             ")": "⟩"
         };
@@ -101,28 +100,6 @@
         function translate() {
             let text = document.getElementById("inputText").value;
 
-            // Special combos first
+            // Special combos
             text = text.replace(/!!!/g, "𐌖");
-            text = text.replace(/!\?/g, "ᛝ");
-
-            let output = "";
-
-            for (let char of text.toLowerCase()) {
-                if (runes[char]) {
-                    output += runes[char];
-                } else if (punct[char]) {
-                    output += punct[char];
-                } else {
-                    output += char;
-                }
-            }
-
-            // Replace final period with ⟡
-            output = output.replace(/·$/g, "⟡");
-
-            document.getElementById("output").innerText = output;
-        }
-    </script>
-
-</body>
-</html>
+            text = text.replace
